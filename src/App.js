@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from 'react-router-dom';
+import LoginPage from './components/login'
+import { connect } from 'react-redux';
+import Dashboard from './containers/dashboard'
+import ls from 'local-storage'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component {
+  state = {
+    loggedIn: false
+  }
+
+  componentDidMount = () => {
+    if (ls.get("token")) {
+      this.setState({
+        loggedIn: true
+      })
+    }
+  }
+
+  render() {
+    return (
+      <Router>
+          <div className="App">
+            <Route exact path="/login" render={routerProps => <LoginPage {...routerProps}/>} />
+            {this.state.loggedIn?
+            <Route exact path="/dashboard" render={routerProps => <Dashboard {...routerProps}/>} />
+            :
+            <Redirect to="/login" />
+            }
+          </div>
+      </Router>
+    );
+  }
 }
 
-export default App;
+ const mapStateToProps = state => {
+  return {
+    token: state.user.token
+  }
+}
+
+export default connect(mapStateToProps)(App);
