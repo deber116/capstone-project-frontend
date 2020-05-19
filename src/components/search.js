@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
+import Media from 'react-bootstrap/Media'
 import { connect } from 'react-redux';
 import { searchCards } from '../actions/searchActions';
 
@@ -26,6 +27,36 @@ class Search extends Component {
         console.log(this.props.searchedCards)
     }
 
+    createCards = () => {
+        return this.props.searchedCards.map(card => {
+            return(
+                <ListGroup.Item>
+                    <Card>
+                        <Card.Body>
+                            <Media>
+                                <img
+                                width={44}
+                                height={64}
+                                className="align-self-center mr-3"
+                                src={card["img_url"]}
+                                alt="Generic placeholder"
+                                />
+                                <Media.Body>
+                                    <p>
+                                        {card.name} - {card.set_name}
+                                    </p>
+                                    <Button variant="outline-secondary" size="xs">
+                                        +
+                                    </Button>
+                                </Media.Body>
+                            </Media>
+                        </Card.Body>
+                    </Card>
+                </ListGroup.Item>
+            )
+        })
+    }
+
     render() {
         return (
             <div>
@@ -43,16 +74,11 @@ class Search extends Component {
                     <Row>
                         <Col>
                             <ListGroup>
-                                <ListGroup.Item>
-                                    <Card>
-                                        <Card.Body>This is some text within a card body.</Card.Body>
-                                    </Card>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <Card>
-                                        <Card.Body>This is some text within a card body.</Card.Body>
-                                    </Card>
-                                </ListGroup.Item>
+                                {this.props.loader?
+                                    <ListGroup.Item>"Searching..."</ListGroup.Item>
+                                :
+                                    this.createCards()
+                                }
                             </ListGroup>
                         </Col>
                     </Row>

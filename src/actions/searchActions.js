@@ -1,6 +1,6 @@
 export const searchCards = (searchTerm, authToken) => {
     return (dispatch) => {
-        dispatch({ type: 'START_ADDING_CARDS' });
+        dispatch({ type: 'START_ADDING_SEARCHED_CARDS' });
         
         const postConfigObj = {
             method: "POST",
@@ -18,7 +18,6 @@ export const searchCards = (searchTerm, authToken) => {
         fetch('http://localhost:3001/cards', postConfigObj)
         .then(resp => resp.json())
         .then(
-            //console.log(response)
             searchedCards => dispatch({ type: "ADD_SEARCHED_CARDS", searchedCards})
         )
         
