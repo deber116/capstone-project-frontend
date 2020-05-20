@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import Media from 'react-bootstrap/Media'
+import { watchlistCards, selectCard, subtractWatchlistCard } from '../actions/watchlistActions';
+
 
 class Watchlist extends Component {
-    state = {
-        watchlistCards: []
-    }
-
     renderCardsOnWatchlist = () => {
-        return this.state.watchlistCards.map(card => {
-            const priceZero = card.recent_prices[0]
-            const priceOne = card.recent_prices[1]
+        return this.props.cards.map(card => {
+            
             return(
                 <ListGroup.Item>
-                    <Card>
+                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)}>
                         <Card.Body>
                             <Media>
                                 <img
@@ -26,9 +24,11 @@ class Watchlist extends Component {
                                 alt="Generic placeholder"
                                 />
                                 <Media.Body>
-                                    <p>
-                                        {card.name} - {card.set_name} ({card.rarity}) {priceZero.edition}: ${priceZero.amount}  {priceOne.edition}: ${priceOne.amount}
-                                    </p>
+                                    <p>{card.name} - {card.set_name} ({card.rarity}) </p>
+                                    <p>{this.renderPrices(card)}</p>
+                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnXCLick(card)}>
+                                        X
+                                    </Button>
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -37,38 +37,66 @@ class Watchlist extends Component {
             )
         })
     }
+    renderPrices = card => {
+        //prices come back where last is most recent
+        let lastPull = card.recent_prices[card.recent_prices.length - 1]
+        let secondLastPull = card.recent_prices[card.recent_prices.length - 2]
+        let priceZero = null
+        let priceOne = null
 
-    getCardsOnWatchlist = () => {
-        const getConfigObj = {
-            method: "GET",
-            headers: 
-            {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              "Authorization": `Bearer ${this.props.token}`
-            },
+        if (lastPull.edition !== secondLastPull.edition) {
+            priceZero = lastPull
+            priceOne = secondLastPull
+            return(
+                priceZero.edition+ ": $"+ priceZero.amount+ "   " + priceOne.edition + ": $" + priceOne.amount
+            )
+        } else if (lastPull.edition == "1st Edition"){
+            priceZero = lastPull
+            return(
+                priceZero.edition+ ": $"+ priceZero.amount
+            )
+        } else {
+            priceZero = secondLastPull
+            return(
+                priceZero.edition+ ": $"+ priceZero.amount
+            )
         }
 
-        fetch('http://localhost:3001/watchlists', getConfigObj)
-        .then(resp => resp.json())
-        .then(response => {
-            console.log(response)
-            this.setState({
-                watchlistCards: [...response]
-            })
-        })
     }
 
+    handleOnXCLick = card => {
+        this.props.subtractWatchlistCard(card, this.props.token)
+    }
+
+    checkIfClicked = card => {
+        if (card == this.props.selectedCard){
+            return "light"
+        } else {
+            return ""
+        }
+    }
+
+    getCardsOnWatchlist = () => {
+        this.props.watchlistCards(this.props.token)
+    }
+
+    //might need to have this happen in update
     componentDidMount = () => {
         this.getCardsOnWatchlist()
     }
+
+
 
     render () {
         return(
             <div>
                 <h5>Watchlist</h5>
                 <ListGroup>
-                    {this.renderCardsOnWatchlist()}
+                    {this.props.loader?
+                        "Loading..."
+                    :
+                        this.renderCardsOnWatchlist()
+                    }
                 </ListGroup>
             </div>
         )
@@ -78,8 +106,25 @@ class Watchlist extends Component {
 
 const mapStateToProps = state => {
     return {
-        token: state.user.token
+        token: state.user.token,
+        cards: state.watchlist.watchlistCards,
+        loader: state.watchlist.loader,
+        selectedCard: state.watchlist.selectedCard
     }
 }
 
-export default connect(mapStateToProps)(Watchlist)
+const mapDispatchToProps = dispatch => {
+    return {
+        watchlistCards:  authToken => {
+            dispatch(watchlistCards(authToken))
+        },
+        selectCard: card => {
+            dispatch(selectCard(card))
+        },
+        subtractWatchlistCard: (card, authToken) => {
+            dispatch(subtractWatchlistCard(card, authToken))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Watchlist)

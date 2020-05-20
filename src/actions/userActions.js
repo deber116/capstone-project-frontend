@@ -1,9 +1,9 @@
 export const signIn = user => {
     return {
       type: 'SIGN_IN',
-      username: user.username,
+      username: user.user.username,
       token: user.jwt,
-      userId: user.id
+      userId: user.user.id
     };
 };
 

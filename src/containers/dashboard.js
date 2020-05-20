@@ -8,6 +8,9 @@ import Col from 'react-bootstrap/Col'
 import { connect } from 'react-redux';
 
 class Dashboard extends Component {
+    state = {
+        selectedCard: null
+    }
     //contains chart
     //contains search bar and results 
     //contains grid with cards for products and portfolios being followed

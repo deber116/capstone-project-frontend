@@ -9,7 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
 import Media from 'react-bootstrap/Media'
 import { connect } from 'react-redux';
-import { searchCards } from '../actions/searchActions';
+import { searchCards, addCardToWatchlist } from '../actions/searchActions';
 
 class Search extends Component {
     state = {
@@ -24,7 +24,11 @@ class Search extends Component {
 
     handleOnSearch = () => {
         this.props.searchCards(this.state.searchTerm, this.props.token)
-        console.log(this.props.searchedCards)
+        
+    }
+
+    handleOnAdd = card => {
+        this.props.addCardToWatchlist(card, this.props.token)
     }
 
     createCards = () => {
@@ -45,7 +49,7 @@ class Search extends Component {
                                     <p>
                                         {card.name} - {card.set_name}
                                     </p>
-                                    <Button variant="outline-secondary" size="xs">
+                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnAdd(card)}>
                                         +
                                     </Button>
                                 </Media.Body>
@@ -100,6 +104,9 @@ const mapDispatchToProps = dispatch => {
     return {
         searchCards: (searchTerm, authToken) => {
             dispatch(searchCards(searchTerm, authToken))
+        }, 
+        addCardToWatchlist: (card, authToken) => {
+            dispatch(addCardToWatchlist(card, authToken))
         }
     }
 }

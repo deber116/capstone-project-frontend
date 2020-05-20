@@ -24,3 +24,29 @@ export const searchCards = (searchTerm, authToken) => {
     };
 };
 
+export const addCardToWatchlist = (card, authToken) => {
+    return (dispatch) => {
+        dispatch({ type: 'START_ADDING_SEARCHED_CARD_TO_WATCHLIST'});
+        
+        const postConfigObj = {
+            method: "POST",
+            headers: 
+            {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "Authorization": `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                card_id: card.product_id
+            })
+        }
+
+        fetch('http://localhost:3001/watchlists', postConfigObj)
+        .then(resp => resp.json())
+        .then(
+            response => dispatch({ type: "ADD_SEARCHED_CARD_TO_WATCHLIST", newCard: response})
+        )
+        
+    };
+};
+
