@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { signIn } from '../actions/userActions';
 import ls from 'local-storage'
 
-class LoginPage extends Component {
+class SignupPage extends Component {
     state = {
         username: "",
         password: "", 
@@ -15,6 +15,7 @@ class LoginPage extends Component {
 
 
     componentDidMount = () => {
+        
         if (this.props.token) {
             this.props.history.push("/dashboard")
         }
@@ -24,14 +25,10 @@ class LoginPage extends Component {
         if (this.state.invalid) {
             return(
                 <Alert variant="danger">
-                    Invalid login credentials. Please try again. 
+                    This username is either already being used, or your password is invalid
                 </Alert>
             )
         }
-    }
-
-    handleOnSignupClick = () => {
-        this.props.history.push("/signup")
     }
 
     
@@ -65,7 +62,7 @@ class LoginPage extends Component {
             })
         }
 
-        fetch('http://localhost:3001/login', postConfigObj)
+        fetch('http://localhost:3001/users', postConfigObj)
         .then(resp => resp.json())
         .then(response => {
             if (response.user) {
@@ -91,7 +88,7 @@ class LoginPage extends Component {
         <div>
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit}>
-                <h1>Welcome back! Please login below</h1>
+                <h1>New to the site? Make an account below</h1>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="username" placeholder="Enter username" value={this.state.username} onChange={this.handleOnUsernameChange}/>
@@ -106,10 +103,6 @@ class LoginPage extends Component {
                     Submit
                 </Button>
             </Form>
-            <br></br>
-            <Button variant="outline-secondary" onClick={this.handleOnSignupClick}>
-                    Sign-up here if you don't have an account already
-            </Button>
         </div>
         )
     }
@@ -131,4 +124,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)
+export default connect(mapStateToProps, mapDispatchToProps)(SignupPage)

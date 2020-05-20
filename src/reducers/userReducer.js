@@ -3,7 +3,6 @@ export default function usersReducer (state = {loader: false}, action) {
         case "SIGN_IN":
             return {
                 ...state, 
-                loader: true,
                 username: action.username,
                 token: action.token,
                 userId: action.userId
