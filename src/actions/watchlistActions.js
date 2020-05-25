@@ -45,6 +45,20 @@ export const subtractWatchlistCard = (card, authToken) => {
     };
 };
 
+export const moreInfo = () => {
+    return{
+        type: "MORE_INFO",
+        moreInfo: true
+    }
+}
+
+export const lessInfo = () => {
+    return{
+        type: "LESS_INFO",
+        moreInfo: false
+    }
+}
+
 export const selectCard = card => {
     return{
         type: "SELECT_CARD",

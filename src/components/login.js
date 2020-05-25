@@ -5,6 +5,10 @@ import Alert from 'react-bootstrap/Alert'
 import { connect } from 'react-redux';
 import { signIn } from '../actions/userActions';
 import ls from 'local-storage'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router-dom';
 
 class LoginPage extends Component {
     state = {
@@ -88,10 +92,13 @@ class LoginPage extends Component {
             this.props.history.push("/dashboard")
         }
         return(
-        <div>
+        <Container fluid>
+            <Row >
+            <Col md={{ span: 4, offset: 4 }} >
+                <Row className="justify-content-center align-items-center">
             {this.checkAlert()}
-            <Form onSubmit={this.handleOnSubmit}>
-                <h1>Welcome back! Please login below</h1>
+            <Form onSubmit={this.handleOnSubmit} >
+                <h5>Welcome back! Please login below</h5>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="username" placeholder="Enter username" value={this.state.username} onChange={this.handleOnUsernameChange}/>
@@ -107,10 +114,11 @@ class LoginPage extends Component {
                 </Button>
             </Form>
             <br></br>
-            <Button variant="outline-secondary" onClick={this.handleOnSignupClick}>
-                    Sign-up here if you don't have an account already
-            </Button>
-        </div>
+            <p>Don't already have an account? <Link to="/signup">Sign-Up</Link></p>
+            </Row>
+            </Col>
+            </Row>
+        </Container>
         )
     }
 }

@@ -45,7 +45,7 @@ class Search extends Component {
                                 src={card["img_url"]}
                                 alt="Generic placeholder"
                                 />
-                                <Media.Body>
+                                <Media.Body className="text-center">
                                     <p>
                                         {card.name} - {card.set_name}
                                     </p>
@@ -77,7 +77,7 @@ class Search extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <ListGroup>
+                            <ListGroup className="search-listgroup">
                                 {this.props.loader?
                                     <ListGroup.Item>"Searching..."</ListGroup.Item>
                                 :
