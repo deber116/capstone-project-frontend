@@ -11,12 +11,13 @@ import { connect } from 'react-redux';
 import Dashboard from './containers/dashboard'
 import ls from 'local-storage'
 import { signIn } from './actions/userActions';
+import NavBar from './components/navbar'
+import Portfolios from './containers/portfolios'
 
 
 class App extends Component {
 
   componentDidMount = () => {
-    console.log("app mounted")
     if (ls.get("token")) {
       const getConfigObj = {
         method: "GET",
@@ -32,7 +33,6 @@ class App extends Component {
       .then(resp => resp.json())
       .then(
           user => {
-            console.log(user)
             this.props.signIn(user)
           }
       )
@@ -43,10 +43,15 @@ class App extends Component {
     return (
       <Router>
           <div className="App">
+            <Route path="/" render={routerProps => <NavBar {...routerProps}/>} />
             <Route exact path="/login" render={routerProps => <LoginPage {...routerProps}/>} />
             <Route exact path="/signup" render={routerProps => <SignupPage {...routerProps}/>} />
+           
             {this.props.token?
-            <Route exact path="/dashboard" render={routerProps => <Dashboard {...routerProps}/>} />
+            <>
+              <Route path="/dashboard" render={routerProps => <Dashboard {...routerProps}/>} />
+              <Route path="/portfolios" render={routerProps => <Portfolios {...routerProps}/>} />
+            </>
             :
             <Redirect to="/login" />
             }

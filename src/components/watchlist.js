@@ -4,7 +4,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Media from 'react-bootstrap/Media'
-import { watchlistCards, selectCard, subtractWatchlistCard } from '../actions/watchlistActions';
+import { watchlistCards, selectCard, subtractWatchlistCard, moreInfo } from '../actions/watchlistActions';
 
 
 class Watchlist extends Component {
@@ -23,11 +23,14 @@ class Watchlist extends Component {
                                 src={card["img_url"]}
                                 alt="Generic placeholder"
                                 />
-                                <Media.Body>
+                                <Media.Body className="text-center">
                                     <p>{card.name} - {card.set_name} ({card.rarity}) </p>
                                     <p>{this.renderPrices(card)}</p>
                                     <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnXCLick(card)}>
                                         X
+                                    </Button>
+                                    <Button variant="outline-secondary" onClick={this.handleOnMoreInfoClick}>
+                                        More Info
                                     </Button>
                                 </Media.Body>
                             </Media>
@@ -64,6 +67,11 @@ class Watchlist extends Component {
 
     }
 
+    handleOnMoreInfoClick = () => {
+        this.props.moreInfo()
+        this.props.history.push(`/dashboard/1`)
+    }
+
     handleOnXCLick = card => {
         this.props.subtractWatchlistCard(card, this.props.token)
     }
@@ -90,8 +98,7 @@ class Watchlist extends Component {
     render () {
         return(
             <div>
-                <h5>Watchlist</h5>
-                <ListGroup>
+                <ListGroup id="watchlist-listgroup">
                     {this.props.loader?
                         "Loading..."
                     :
@@ -123,6 +130,9 @@ const mapDispatchToProps = dispatch => {
         },
         subtractWatchlistCard: (card, authToken) => {
             dispatch(subtractWatchlistCard(card, authToken))
+        },
+        moreInfo : () => {
+            dispatch(moreInfo())
         }
     }
 }

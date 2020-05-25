@@ -60,6 +60,7 @@ class WatchlistChart extends React.Component {
             return [
                 {
                     label: '1st Edition Price',
+                    display: true,
                     fill: true,
                     lineTension: 0,
                     backgroundColor: 'rgba(75,192,192,1)',
@@ -84,13 +85,19 @@ class WatchlistChart extends React.Component {
             height={70}
             options={{
                 title:{
-                display:false,
-                text:'Average Rainfall per month',
+                display:true,
+                text: `1st Edition Prices`,
                 fontSize:20
                 },
                 legend:{
                 display:false,
                 position:'right'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true, 
+                        labelString: "Hours Since Price Was Pulled"
+                    }]
                 }
             }}
             />

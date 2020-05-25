@@ -5,6 +5,10 @@ import Alert from 'react-bootstrap/Alert'
 import { connect } from 'react-redux';
 import { signIn } from '../actions/userActions';
 import ls from 'local-storage'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router-dom';
 
 class SignupPage extends Component {
     state = {
@@ -85,7 +89,9 @@ class SignupPage extends Component {
             this.props.history.push("/dashboard")
         }
         return(
-        <div>
+        <Container>
+            <Row>
+            <Col md={{ span: 4, offset: 4 }}>
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit}>
                 <h1>New to the site? Make an account below</h1>
@@ -103,7 +109,11 @@ class SignupPage extends Component {
                     Submit
                 </Button>
             </Form>
-        </div>
+            <br></br>
+            <p>Already have an account? <Link to="/login">Login</Link></p>
+            </Col>
+            </Row>
+        </Container>
         )
     }
 }
