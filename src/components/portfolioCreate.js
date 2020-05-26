@@ -11,7 +11,8 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-import Dropdown from 'react-bootstrap/Dropdown'
+import Alert from 'react-bootstrap/Alert'
+
 
 class PortfolioCreate extends Component {
     state = {
@@ -19,18 +20,29 @@ class PortfolioCreate extends Component {
         description: "",
         searchTerm: "",
         portfolioCards: [],
-        quantitySelected: 1
+        quantitySelected: 1,
+        invalid: false
+    }
+
+    checkAlert = () => {
+        if (this.state.invalid) {
+            return(
+                <Alert variant="danger">
+                    A portfolio needs a name and at least one card in order to be created. 
+                </Alert>
+            )
+        }
     }
 
     handleOnPortfolioNameChange = event => {
         this.setState({
-          username: event.target.value
+          portfolioName: event.target.value
         });
     }
 
     handleOnDescriptionChange = event => {
         this.setState({
-          password: event.target.value
+          description: event.target.value
         });
     }
     handleOnSearchTermChange = event => {
@@ -41,12 +53,16 @@ class PortfolioCreate extends Component {
 
     handleOnSearch = () => {
         this.props.searchCards(this.state.searchTerm, this.props.token)
-        
     }
 
     handleOnAdd = (card, quantity) => {
         console.log("clicked")
-        let newCard = {...card, quantity}
+        let newCard = {
+            name: card.name,
+            set_name: card.set_name, 
+            product_id: card.product_id, 
+            quantity
+        }
         this.setState(prevState => {
             return {
                 portfolioCards: [...prevState.portfolioCards, newCard]
@@ -93,11 +109,50 @@ class PortfolioCreate extends Component {
     }
 
     handleOnRemove = card => {
+        const newPortfolioCards = this.state.portfolioCards.filter(pcard => {
+            return pcard.product_id !== card.product_id
+        })
+        console.log(newPortfolioCards)
+        this.setState({
+            portfolioCards: newPortfolioCards
+        })
 
     }
 
     handleOnSubmit = event => {
         event.preventDefault()
+        if (this.state.portfolioName == "") {
+            this.setState({
+                invalid: true
+            })
+        } else if (this.state.portfolioCards == []) {
+            this.setState({
+                invalid: true
+            })
+        } else {
+            const postConfigObj = {
+                method: "POST",
+                headers: 
+                {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "Authorization": `Bearer ${this.props.token}`
+                },
+                body: JSON.stringify({
+                    name: this.state.portfolioName,
+                    description: this.state.description,
+                    portfolioCards: this.state.portfolioCards
+                })
+            }
+
+            fetch('http://localhost:3001/portfolios', postConfigObj)
+            .then(resp => resp.json())
+            .then(response => {
+                console.log(response)
+                this.props.history.push("/dashboard")
+
+            })
+        }
     }
 
     isSearchedCardAlreadyInList = card => {
@@ -158,7 +213,7 @@ class PortfolioCreate extends Component {
             <Row>
             <Col>
             <Form>
-                
+                {this.checkAlert()}
                 <Form.Group controlId="portfolioInputName">
                     <Form.Label>Portfolio Name</Form.Label>
                     <Form.Control type="username" placeholder="Portfolio name" value={this.state.portfolioName} onChange={this.handleOnPortfolioNameChange}/>

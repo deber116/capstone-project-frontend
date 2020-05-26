@@ -1,4 +1,4 @@
-export default function watchlistReducer (state = {loader: false, watchlistCards: [], selectedCard: null, moreInfo: false}, action) {
+export default function watchlistReducer (state = {loader: false, watchlistCards: [], portfolios: [], selectedCard: null, moreInfo: false}, action) {
     switch (action.type) {
         case "START_ADDING_WATCHLIST_CARDS":
             return {
@@ -43,6 +43,18 @@ export default function watchlistReducer (state = {loader: false, watchlistCards
                 ...state,
                 moreInfo: action.moreInfo
             }
+        case "GET_PORTFOLIOS":
+            return {
+                ...state,
+                loader: false,
+                portfolios: [...action.portfolios]
+            }
+        case "START_ADDING_PORTFOLIOS":
+            return {
+                ...state, 
+                loader: true,
+                portfolios: state.portfolios
+            };
         default:
             return state;
     }

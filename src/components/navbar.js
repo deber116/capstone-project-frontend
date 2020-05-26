@@ -7,7 +7,7 @@ class NavBar extends Component {
     
     handleOnPortfoliosClick = () => {
         if (this.props.token) {
-            this.props.history.push('/portfolios')
+            this.props.history.push('/portfolios/create')
         }
     }
 
