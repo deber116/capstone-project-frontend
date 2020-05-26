@@ -8,7 +8,7 @@ class WatchlistChart extends React.Component {
         if (this.props.selectedCard) {
             let results = this.props.selectedCard.recent_prices.map(price => {
                 if (price.edition == "1st Edition") {
-                    return price.created_at
+                    return true
                 } 
                 return null
             })

@@ -21,6 +21,30 @@ export const watchlistCards = authToken => {
     };
 };
 
+export const getPortfolios = authToken => {
+    return dispatch => {
+        dispatch({ type: 'START_ADDING_PORTFOLIOS' });
+        const getConfigObj = {
+            method: "GET",
+            headers: 
+            {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "Authorization": `Bearer ${authToken}`
+            }
+        }
+
+        fetch('http://localhost:3001/portfolios', getConfigObj)
+        .then(resp => resp.json())
+        .then(
+            portfolios => {
+                dispatch({ type: "GET_PORTFOLIOS", portfolios})
+            }
+        )
+        
+    };
+}
+
 export const subtractWatchlistCard = (card, authToken) => {
     return (dispatch) => {
         const patchConfigObj = {

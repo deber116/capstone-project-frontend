@@ -4,7 +4,13 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Media from 'react-bootstrap/Media'
-import { watchlistCards, selectCard, subtractWatchlistCard, moreInfo } from '../actions/watchlistActions';
+import { 
+    watchlistCards, 
+    selectCard, 
+    subtractWatchlistCard, 
+    moreInfo,
+    getPortfolios
+ } from '../actions/watchlistActions';
 
 
 class Watchlist extends Component {
@@ -39,6 +45,30 @@ class Watchlist extends Component {
                 </ListGroup.Item>
             )
         })
+    }
+
+    renderPortfoliosOnWatchlist = () => {
+        return this.props.portfolios.map(card => {
+            
+            return(
+                <ListGroup.Item>
+                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)}>
+                        <Card.Body>
+                            <Media>
+                                <Media.Body className="text-center">
+                                    <p>Portfolio: {card.name} </p>
+                                    <p>{this.renderPrices(card)}</p>
+                                    <Button variant="outline-secondary" size="xs" >
+                                        Delete Portfolio
+                                    </Button>
+                                </Media.Body>
+                            </Media>
+                        </Card.Body>
+                    </Card>
+                </ListGroup.Item>
+            )
+        })
+
     }
     renderPrices = card => {
         //prices come back where last is most recent
@@ -83,6 +113,9 @@ class Watchlist extends Component {
             return ""
         }
     }
+    getPortfolios = () => {
+        this.props.getPortfolios(this.props.token)
+    }
 
     getCardsOnWatchlist = () => {
         this.props.watchlistCards(this.props.token)
@@ -91,6 +124,7 @@ class Watchlist extends Component {
     //might need to have this happen in update
     componentDidMount = () => {
         this.getCardsOnWatchlist()
+        this.getPortfolios()
     }
 
 
@@ -102,7 +136,10 @@ class Watchlist extends Component {
                     {this.props.loader?
                         "Loading..."
                     :
-                        this.renderCardsOnWatchlist()
+                    <>
+                        {this.renderCardsOnWatchlist()}
+                        {this.renderPortfoliosOnWatchlist()}
+                    </>
                     }
                 </ListGroup>
             </div>
@@ -116,7 +153,8 @@ const mapStateToProps = state => {
         token: state.user.token,
         cards: state.watchlist.watchlistCards,
         loader: state.watchlist.loader,
-        selectedCard: state.watchlist.selectedCard
+        selectedCard: state.watchlist.selectedCard,
+        portfolios: state.watchlist.portfolios
     }
 }
 
@@ -133,7 +171,10 @@ const mapDispatchToProps = dispatch => {
         },
         moreInfo : () => {
             dispatch(moreInfo())
-        }
+        },
+        getPortfolios:  authToken => {
+            dispatch(getPortfolios(authToken))
+        },
     }
 }
 
