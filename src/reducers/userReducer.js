@@ -13,7 +13,7 @@ export default function usersReducer (state = {loader: false}, action) {
                 ...state, 
                 username: null,
                 userId: null,
-                loader: false
+                token: null
     };
         default:
             return state;

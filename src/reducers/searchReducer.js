@@ -12,6 +12,11 @@ export default function searchReducer (state = {loader: false, searchedCards: []
                 loader: false,
                 searchedCards: action.searchedCards
             }
+        case "CLEAR_SEARCH":
+            return {
+                ...state,
+                searchedCards: []
+            }
         default:
             return state;
     }

@@ -77,7 +77,7 @@ class Search extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <ListGroup className="search-listgroup">
+                            <ListGroup className="search-listgroup" variant="flush">
                                 {this.props.loader?
                                     <ListGroup.Item>"Searching..."</ListGroup.Item>
                                 :

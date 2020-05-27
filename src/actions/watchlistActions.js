@@ -38,6 +38,7 @@ export const getPortfolios = authToken => {
         .then(resp => resp.json())
         .then(
             portfolios => {
+                console.log(portfolios)
                 dispatch({ type: "GET_PORTFOLIOS", portfolios})
             }
         )
@@ -68,6 +69,29 @@ export const subtractWatchlistCard = (card, authToken) => {
         
     };
 };
+
+export const deletePortfolio = (portfolio, authToken) => {
+    return dispatch => {
+        const deleteConfigObj = {
+            method: "DELETE",
+            headers: 
+            {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "Authorization": `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                id: portfolio.id
+            })
+        }
+
+        fetch(`http://localhost:3001/portfolios/${portfolio.id}`, deleteConfigObj)
+        .then(resp => resp.json())
+        .then(
+            portfolios => dispatch({ type: "DELETE_PORTFOLIO", portfolios})
+        )
+    }
+}
 
 export const moreInfo = () => {
     return{
