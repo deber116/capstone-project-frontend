@@ -9,8 +9,11 @@ import {
     selectCard, 
     subtractWatchlistCard, 
     moreInfo,
-    getPortfolios
+    getPortfolios,
+    deletePortfolio
  } from '../actions/watchlistActions';
+ import Accordion from 'react-bootstrap/Accordion'
+
 
 
 class Watchlist extends Component {
@@ -48,23 +51,39 @@ class Watchlist extends Component {
     }
 
     renderPortfoliosOnWatchlist = () => {
-        return this.props.portfolios.map(card => {
+        return this.props.portfolios.map(portfolio => {
             
             return(
                 <ListGroup.Item>
-                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)}>
+                    <Accordion>
+                    <Card bg={this.checkIfClicked(portfolio)} onClick={() => this.props.selectCard(portfolio)}>
+                    
                         <Card.Body>
                             <Media>
                                 <Media.Body className="text-center">
-                                    <p>Portfolio: {card.name} </p>
-                                    <p>{this.renderPrices(card)}</p>
-                                    <Button variant="outline-secondary" size="xs" >
-                                        Delete Portfolio
+                                    <p>Portfolio: {portfolio.name} </p>
+                                    <p>{this.renderPrices(portfolio)}</p>
+                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnPortfolioDelete(portfolio)}>
+                                        Delete
                                     </Button>
+                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnPortfolioUpdate(portfolio)}>
+                                        Update
+                                    </Button>
+                                    <Accordion.Toggle as={Button} variant="outline-secondary" eventKey="0">
+                                         See Description
+                                    </Accordion.Toggle>
+                                    
                                 </Media.Body>
+                                
                             </Media>
+                            
                         </Card.Body>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body><p>{portfolio.description}</p></Card.Body>
+                        </Accordion.Collapse>
                     </Card>
+                    
+                    </Accordion>
                 </ListGroup.Item>
             )
         })
@@ -81,20 +100,28 @@ class Watchlist extends Component {
             priceZero = lastPull
             priceOne = secondLastPull
             return(
-                priceZero.edition+ ": $"+ priceZero.amount+ "   " + priceOne.edition + ": $" + priceOne.amount
+                priceZero.edition + ": $" + priceZero.amount.toFixed(2) + "   " + priceOne.edition + ": $" + priceOne.amount.toFixed(2)
             )
         } else if (lastPull.edition == "1st Edition"){
             priceZero = lastPull
             return(
-                priceZero.edition+ ": $"+ priceZero.amount
+                priceZero.edition + ": $" + priceZero.amount.toFixed(2)
             )
         } else {
             priceZero = secondLastPull
             return(
-                priceZero.edition+ ": $"+ priceZero.amount
+                priceZero.edition + ": $" + priceZero.amount.toFixed(2)
             )
         }
 
+    }
+
+    handleOnPortfolioUpdate = portfolio => {
+        this.props.history.push(`/portfolios/edit/${portfolio.id}`)
+    }
+
+    handleOnPortfolioDelete = portfolio => {
+        this.props.deletePortfolio(portfolio, this.props.token)
     }
 
     handleOnMoreInfoClick = () => {
@@ -132,7 +159,7 @@ class Watchlist extends Component {
     render () {
         return(
             <div>
-                <ListGroup id="watchlist-listgroup">
+                <ListGroup id="watchlist-listgroup" variant="flush">
                     {this.props.loader?
                         "Loading..."
                     :
@@ -175,6 +202,9 @@ const mapDispatchToProps = dispatch => {
         getPortfolios:  authToken => {
             dispatch(getPortfolios(authToken))
         },
+        deletePortfolio: (portfolio, authToken) => {
+            dispatch(deletePortfolio(portfolio, authToken))
+        }
     }
 }
 

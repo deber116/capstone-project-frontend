@@ -2,19 +2,29 @@ import Nav from 'react-bootstrap/Nav'
 import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar'
 import { connect } from 'react-redux';
+import { clearSearch } from '../actions/searchActions';
+import { logout } from '../actions/userActions';
+import ls from 'local-storage'
 
 class NavBar extends Component {
     
     handleOnPortfoliosClick = () => {
         if (this.props.token) {
+            this.props.clearSearch()
             this.props.history.push('/portfolios/create')
         }
     }
 
     handleOnDashboardClick = () => {
         if (this.props.token) {
+            this.props.clearSearch()
             this.props.history.push('/dashboard')
         }
+    }
+
+    handleOnLogoutClick = () => {
+        ls.clear()
+        this.props.logout()
     }
 
     render() {
@@ -26,14 +36,21 @@ class NavBar extends Component {
                 <>
                     <Nav.Link onClick={this.handleOnDashboardClick}>Dashboard</Nav.Link>
                     <Nav.Link onClick={this.handleOnPortfoliosClick}>Portfolios</Nav.Link>
-                    <Nav.Link onClick={this.handleOnPortfoliosClick} className="justify-content-end">Logout</Nav.Link>
+                    
+                
                 </>
                 :
-                <>
-                </>
+                    null
                 }
                 
                 </Nav>
+                {this.props.token?
+                    <Nav className="ml-auto">
+                        <Nav.Link onClick={this.handleOnLogoutClick} className="justify-content-end">Logout</Nav.Link>
+                    </Nav>
+                :
+                    null
+                }
             </Navbar>
         )
     }
@@ -45,4 +62,15 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(NavBar)
+const mapDispatchToProps = dispatch => {
+    return {
+        clearSearch: () => {
+            dispatch(clearSearch())
+        },
+        logout: () => {
+            dispatch(logout())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

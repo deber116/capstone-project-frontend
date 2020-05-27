@@ -14,12 +14,12 @@ import FormControl from 'react-bootstrap/FormControl'
 import Alert from 'react-bootstrap/Alert'
 
 
-class PortfolioCreate extends Component {
+class PortfolioEdit extends Component {
     state = {
-        portfolioName: "",
-        description: "",
+        portfolioName: this.props.selectedCard.name,
+        description: this.props.selectedCard.description,
         searchTerm: "",
-        portfolioCards: [],
+        portfolioCards: this.props.selectedCard.cards,
         quantitySelected: 1,
         invalid: false
     }
@@ -56,6 +56,7 @@ class PortfolioCreate extends Component {
     }
 
     handleOnAdd = (card, quantity) => {
+        console.log("clicked")
         let newCard = {
             name: card.name,
             set_name: card.set_name, 
@@ -130,7 +131,7 @@ class PortfolioCreate extends Component {
             })
         } else {
             const postConfigObj = {
-                method: "POST",
+                method: "PATCH",
                 headers: 
                 {
                 "Content-Type": "application/json",
@@ -144,7 +145,7 @@ class PortfolioCreate extends Component {
                 })
             }
 
-            fetch('http://localhost:3001/portfolios', postConfigObj)
+            fetch(`http://localhost:3001/portfolios/${this.props.selectedCard.id}`, postConfigObj)
             .then(resp => resp.json())
             .then(response => {
                 this.props.clearSearch()
@@ -180,9 +181,8 @@ class PortfolioCreate extends Component {
                                 />
                                 <Media.Body className="text-center">
                                     <p>{card.name} - {card.set_name}</p>
-                                        
+                                    <div>
                                         <InputGroup className="mb-3">
-                                        
                                             <InputGroup.Prepend>
                                                 <Button onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
                                                 <InputGroup.Text>{this.state.quantitySelected}</InputGroup.Text>
@@ -191,10 +191,12 @@ class PortfolioCreate extends Component {
                                             <InputGroup.Append>
                                                 <Button onClick={this.handleOnQuantityIncrease}>+</Button>
                                             </InputGroup.Append>
-                                            <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
-                                                Add to Portfolio
-                                            </Button>
                                         </InputGroup>
+                                        </div>
+                                        <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
+                                            Add to Portfolio
+                                        </Button>
+                                    
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -233,7 +235,7 @@ class PortfolioCreate extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <ListGroup className="search-listgroup" variant="flush">
+                        <ListGroup className="search-listgroup">
                             {this.props.loader?
                                 <ListGroup.Item>"Searching..."</ListGroup.Item>
                             :
@@ -244,7 +246,7 @@ class PortfolioCreate extends Component {
                 </Row>
                 
                 <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
-                    Save Portfolio
+                    Submit
                 </Button>
             </Form>
             </Col>
@@ -263,7 +265,8 @@ const mapStateToProps = state => {
     return {
         token: state.user.token,
         searchedCards: state.search.searchedCards,
-        loader: state.search.loader
+        loader: state.search.loader,
+        selectedCard: state.watchlist.selectedCard
     } 
 }
 
@@ -278,4 +281,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PortfolioCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PortfolioEdit)

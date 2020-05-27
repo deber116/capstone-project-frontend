@@ -55,6 +55,11 @@ export default function watchlistReducer (state = {loader: false, watchlistCards
                 loader: true,
                 portfolios: state.portfolios
             };
+        case "DELETE_PORTFOLIO":
+            return {
+                ...state, 
+                portfolios: action.portfolios
+            };
         default:
             return state;
     }

@@ -95,8 +95,18 @@ class WatchlistChart extends React.Component {
                 },
                 scales: {
                     xAxes: [{
-                        display: true, 
-                        labelString: "Hours Since Price Was Pulled"
+                        scaleLabel: {
+                            display: true, 
+                            labelString: "Hours Since Price Was Pulled"
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            // Include a dollar sign in the ticks
+                            callback: function(value, index, values) {
+                                return '$' + value;
+                            }
+                        }
                     }]
                 }
             }}

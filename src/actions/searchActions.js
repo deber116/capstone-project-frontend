@@ -50,3 +50,9 @@ export const addCardToWatchlist = (card, authToken) => {
     };
 };
 
+export const clearSearch = () => {
+    return{
+        type: "CLEAR_SEARCH"
+    }
+}
+
