@@ -12,8 +12,9 @@ import {
     getPortfolios,
     deletePortfolio
  } from '../actions/watchlistActions';
+ import { clearSearch } from '../actions/searchActions';
  import Accordion from 'react-bootstrap/Accordion'
-
+ import { Link } from 'react-router-dom';
 
 
 class Watchlist extends Component {
@@ -21,7 +22,7 @@ class Watchlist extends Component {
         return this.props.cards.map(card => {
             
             return(
-                <ListGroup.Item>
+                <ListGroup.Item >
                     <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)}>
                         <Card.Body>
                             <Media>
@@ -35,12 +36,9 @@ class Watchlist extends Component {
                                 <Media.Body className="text-center">
                                     <p>{card.name} - {card.set_name} ({card.rarity}) </p>
                                     <p>{this.renderPrices(card)}</p>
-                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnXCLick(card)}>
-                                        X
-                                    </Button>
-                                    <Button variant="outline-secondary" onClick={this.handleOnMoreInfoClick}>
-                                        More Info
-                                    </Button>
+                                    
+                                    <Link onClick={() => this.handleOnXCLick(card)}>Remove from watchlist</Link>
+                                    
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -131,6 +129,9 @@ class Watchlist extends Component {
 
     handleOnXCLick = card => {
         this.props.subtractWatchlistCard(card, this.props.token)
+        // console.log(this.props.cards.indexOf(card) )
+    //     const newIdx = (this.props.cards.indexOf(card) - 2)
+    //     this.props.selectCard(this.props.cards[newIdx])
     }
 
     checkIfClicked = card => {
@@ -142,10 +143,12 @@ class Watchlist extends Component {
     }
     getPortfolios = () => {
         this.props.getPortfolios(this.props.token)
+        this.props.clearSearch()
     }
 
     getCardsOnWatchlist = () => {
         this.props.watchlistCards(this.props.token)
+        
     }
 
     //might need to have this happen in update
@@ -163,9 +166,13 @@ class Watchlist extends Component {
                     {this.props.loader?
                         "Loading..."
                     :
+                    
                     <>
-                        {this.renderCardsOnWatchlist()}
-                        {this.renderPortfoliosOnWatchlist()}
+                        {(this.props.watchlistToggle === "cards")?
+                            this.renderCardsOnWatchlist()
+                        :
+                            this.renderPortfoliosOnWatchlist()
+                        }
                     </>
                     }
                 </ListGroup>
@@ -181,7 +188,8 @@ const mapStateToProps = state => {
         cards: state.watchlist.watchlistCards,
         loader: state.watchlist.loader,
         selectedCard: state.watchlist.selectedCard,
-        portfolios: state.watchlist.portfolios
+        portfolios: state.watchlist.portfolios,
+        watchlistToggle: state.watchlist.watchlistToggle
     }
 }
 
@@ -204,6 +212,9 @@ const mapDispatchToProps = dispatch => {
         },
         deletePortfolio: (portfolio, authToken) => {
             dispatch(deletePortfolio(portfolio, authToken))
+        },
+        clearSearch: () => {
+            dispatch(clearSearch())
         }
     }
 }

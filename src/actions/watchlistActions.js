@@ -113,3 +113,10 @@ export const selectCard = card => {
         card
     }
 }
+
+export const toggleWatchlist = toggle => {
+    return{
+        type: "TOGGLE_WATCHLIST",
+        watchlistToggle: toggle
+    }
+}

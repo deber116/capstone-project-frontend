@@ -179,7 +179,7 @@ class PortfolioCreate extends Component {
                                 alt="Generic placeholder"
                                 />
                                 <Media.Body className="text-center">
-                                    <p>{card.name} - {card.set_name}</p>
+                                    <p>{card.name} - {card.set_name} ({card.rarity})</p>
                                         
                                         <InputGroup className="mb-3">
                                         

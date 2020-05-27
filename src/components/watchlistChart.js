@@ -7,7 +7,7 @@ class WatchlistChart extends React.Component {
     createLabels = () => {
         if (this.props.selectedCard) {
             let results = this.props.selectedCard.recent_prices.map(price => {
-                if (price.edition == "1st Edition") {
+                if (price.edition == "1st Edition" || price.edition == "Limited") {
                     return true
                 } 
                 return null
@@ -34,7 +34,7 @@ class WatchlistChart extends React.Component {
     createData = () => {
         if (this.props.selectedCard) {
             let results = this.props.selectedCard.recent_prices.map(price => {
-                if (price.edition == "1st Edition") {
+                if (price.edition == "1st Edition" || price.edition == "Limited") {
                     return price.amount
                 } 
                 return null
@@ -43,6 +43,7 @@ class WatchlistChart extends React.Component {
             results = results.filter(amount => {
                 return amount
             })
+            
 
             return [
                 {
