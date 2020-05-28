@@ -13,7 +13,7 @@
 
 #watchlist-listgroup{
   height: auto;
-  max-height: calc(85vh - 56px);
+  max-height: calc(80vh - 56px);
   margin-bottom: 10px;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
@@ -47,9 +47,9 @@
 .btn-submit-portfolio {
   margin: 15px;
 }
-
-.btn-add-to-portfolio {
-  margin-left: 50px;
+.btn-portfolio-card {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 #portfolio-cards-listgroup{
@@ -79,11 +79,41 @@
   
 }
 
+.custom-shadow {
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
+  box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
+}
+
 .btn-portfolio {
   margin-right: 5px;
   margin-left: 5px;
 }
 
+.btn-teal {
+  background-color: rgba(75,192,192,1);
+  color: white;
+}
+
+.btn-outline-teal {
+  background-color: white;
+  color: rgba(75,192,192,1);
+  border-color: rgba(75,192,192,1);
+}
+
+.bg-teal {
+  background-color: rgba(75,192,192,1);
+  color: white;
+}
+.bg-outline-teal {
+  background-color: white;
+  color: rgba(75,192,192,1);
+}
+
+.bg-grey {
+  background-color: #f2f2f2;
+  color: rgb(63, 63, 63);
+}
 .btn-flat {
   background-color: purple;
   color: white;

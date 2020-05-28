@@ -25,7 +25,7 @@ class Watchlist extends Component {
             
             return(
                 <ListGroup.Item >
-                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)}>
+                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectCard(card)} className="custom-shadow">
                         <Card.Body>
                             <Media>
                                 <img
@@ -56,20 +56,20 @@ class Watchlist extends Component {
             return(
                 <ListGroup.Item>
                     <Accordion>
-                    <Card bg={this.checkIfPortfolioClicked(portfolio)} onClick={() => this.handleOnPortfolioCardClick(portfolio)}>
+                    <Card bg={this.checkIfPortfolioClicked(portfolio)} onClick={() => this.handleOnPortfolioCardClick(portfolio)} className="custom-shadow">
                     
                         <Card.Body>
                             <Media>
                                 <Media.Body className="text-center">
                                     <p>Portfolio: {portfolio.name} </p>
                                     <p>{this.renderPrices(portfolio)}</p>
-                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnPortfolioDelete(portfolio)}>
+                                    <Button className="btn-portfolio-card" variant="danger" size="xs" onClick={() => this.handleOnPortfolioDelete(portfolio)}>
                                         Delete
                                     </Button>
-                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnPortfolioUpdate(portfolio)}>
+                                    <Button className="btn-portfolio-card" variant="outline-secondary" size="xs" onClick={() => this.handleOnPortfolioUpdate(portfolio)}>
                                         Update
                                     </Button>
-                                    <Accordion.Toggle as={Button} variant="outline-secondary" eventKey="0">
+                                    <Accordion.Toggle className="btn-portfolio-card" as={Button} variant="outline-secondary" eventKey="0">
                                          See Description
                                     </Accordion.Toggle>
                                     
@@ -139,7 +139,7 @@ class Watchlist extends Component {
 
     checkIfClicked = card => {
         if (card == this.props.selectedCard){
-            return "light"
+            return "grey"
         } else {
             return ""
         }
@@ -147,7 +147,7 @@ class Watchlist extends Component {
 
     checkIfPortfolioClicked = portfolio => {
         if (portfolio == this.props.selectedPortfolio){
-            return "light"
+            return "grey"
         } else {
             return ""
         }

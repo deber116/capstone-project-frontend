@@ -26,7 +26,7 @@ class ShowCard extends Component {
     }
     checkIfClicked = card => {
         if (card == this.props.selectedPortfolioCard){
-            return "light"
+            return "grey"
         } else {
             return ""
         }
@@ -37,7 +37,7 @@ class ShowCard extends Component {
             
             return(
                 <ListGroup.Item >
-                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectPortfolioCard(card)}>
+                    <Card bg={this.checkIfClicked(card)} onClick={() => this.props.selectPortfolioCard(card)} className="custom-shadow">
                         <Card.Body>
                             <Media>
                                 <img

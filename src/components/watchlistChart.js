@@ -83,6 +83,12 @@ class WatchlistChart extends React.Component {
     }
 
     render() {
+        let selectedItemName = null
+        if (this.props.watchlistToggle == "portfolios" && this.props.selectedPortfolio) {
+            selectedItemName = ("Portfolio: " + this.props.selectedPortfolio.name + " - ")
+        } else if (this.props.watchlistToggle == "cards" && this.props.selectedCard) {
+            selectedItemName = (this.props.selectedCard.name + " - ")
+        } 
         return (
         <div>
             <Line
@@ -95,7 +101,7 @@ class WatchlistChart extends React.Component {
             options={{
                 title:{
                 display:true,
-                text: `1st Edition Prices`,
+                text: `${selectedItemName}1st Edition Prices`,
                 fontSize:20
                 },
                 legend:{

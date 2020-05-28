@@ -109,7 +109,7 @@ class LoginPage extends Component {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={this.state.password} onChange={this.handleOnPasswordChange}/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button className="btn-block" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>

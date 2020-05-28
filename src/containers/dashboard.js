@@ -24,17 +24,17 @@ class Dashboard extends Component {
 
     handleWatchlistToggleCards = () => {
         if (this.props.watchlistToggle === "cards") {
-            return "info"
+            return "teal"
         } else {
-            return "outline-info"
+            return "outline-teal"
         }
     }
 
     handleWatchlistTogglePortfolios = () => {
         if (this.props.watchlistToggle === "portfolios") {
-            return "info"
+            return "teal"
         } else {
-            return "outline-info"
+            return "outline-teal"
         }
     }
 

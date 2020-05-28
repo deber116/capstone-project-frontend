@@ -92,6 +92,7 @@ class SignupPage extends Component {
         <Container fluid>
             <Row>
             <Col md={{ span: 4, offset: 4 }}>
+            <Row className="justify-content-center align-items-center">
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit}>
                 <h5>New to the site? Make an account below</h5>
@@ -105,12 +106,13 @@ class SignupPage extends Component {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={this.state.password} onChange={this.handleOnPasswordChange}/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button className="btn-block" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>
             <br></br>
             <p>Already have an account? <Link to="/login">Login</Link></p>
+            </Row>
             </Col>
             </Row>
         </Container>

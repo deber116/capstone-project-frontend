@@ -170,7 +170,7 @@ class PortfolioEdit extends Component {
             
             return(
                 <ListGroup.Item>
-                    <Card>
+                    <Card className="custom-shadow">
                         <Card.Body>
                             <Media>
                                 <img
@@ -227,7 +227,7 @@ class PortfolioEdit extends Component {
                     <Col>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
-                            <Button variant="info" onClick={this.handleOnSearch}>Search Card</Button>
+                            <Button variant="secondary" onClick={this.handleOnSearch}>Search Card</Button>
                         </InputGroup.Prepend>
                         <FormControl value={this.state.searchTerm} onChange={this.handleOnSearchTermChange}/>
                     </InputGroup>
@@ -245,7 +245,7 @@ class PortfolioEdit extends Component {
                     </Col>
                 </Row>
                 <Row className="justify-content-center">
-                <Button className="btn-block btn-submit-portfolio" variant="info" type="submit" onClick={this.handleOnSubmit}>
+                <Button className="btn-block btn-submit-portfolio" variant="teal" type="submit" onClick={this.handleOnSubmit}>
                     Update Portfolio
                 </Button>
                 </Row>
