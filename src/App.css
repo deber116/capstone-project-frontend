@@ -44,9 +44,16 @@
   overflow:auto;
   -webkit-overflow-scrolling: touch;
 }
+.btn-submit-portfolio {
+  margin: 15px;
+}
+
+.btn-add-to-portfolio {
+  margin-left: 50px;
+}
 
 #portfolio-cards-listgroup{
-  border: 3px solid #333;
+  
   min-height: 12vh;
   max-height: 75vh;
   padding: 10px;
@@ -72,7 +79,10 @@
   
 }
 
-
+.btn-portfolio {
+  margin-right: 5px;
+  margin-left: 5px;
+}
 
 .btn-flat {
   background-color: purple;

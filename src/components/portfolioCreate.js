@@ -169,7 +169,6 @@ class PortfolioCreate extends Component {
         return this.props.searchedCards.map(card => {
             
             return(
-                
                 <ListGroup.Item>
                     <Card>
                         <Card.Body>
@@ -184,20 +183,20 @@ class PortfolioCreate extends Component {
                                 <Media.Body className="text-center">
                                     <p>{card.name} - {card.set_name} ({card.rarity})</p>
                                         
-                                        <InputGroup className="mb-3">
-                                        
+                                        <InputGroup className="mb-3 justify-content-center">
                                             <InputGroup.Prepend>
-                                                <Button onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
                                                 <InputGroup.Text>{this.state.quantitySelected}</InputGroup.Text>
                                             
                                             </InputGroup.Prepend>
                                             <InputGroup.Append>
-                                                <Button onClick={this.handleOnQuantityIncrease}>+</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityIncrease}>+</Button>
                                             </InputGroup.Append>
-                                            <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
-                                                Add to Portfolio
-                                            </Button>
+                                            
                                         </InputGroup>
+                                        <Button variant="outline-secondary" onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)} className="btn-portfolio">
+                                                Add to Portfolio
+                                        </Button>
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -230,7 +229,7 @@ class PortfolioCreate extends Component {
                     <Col>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
-                            <Button variant="secondary" onClick={this.handleOnSearch}>Search Card</Button>
+                            <Button variant="info" onClick={this.handleOnSearch}>Search Card</Button>
                         </InputGroup.Prepend>
                         <FormControl value={this.state.searchTerm} onChange={this.handleOnSearchTermChange}/>
                     </InputGroup>
@@ -248,17 +247,26 @@ class PortfolioCreate extends Component {
                     </Col>
                 </Row>
                 <Row className="justify-content-center">
-                <Button variant="info" type="submit" onClick={this.handleOnSubmit}>
+                <Button className="btn-block btn-submit-portfolio" variant="info" type="submit" onClick={this.handleOnSubmit}>
                     Save Portfolio
                 </Button>
                 </Row>
             </Form>
             </Col>
             <Col>
-                <h1>Cards in your Portfolio</h1>
+                <Row className="justify-content-center">
+                    <h1 style={{"font-family": "Avenir"}}>Cards in your Portfolio</h1>
+                </Row>
                 <ListGroup id="portfolio-cards-listgroup">
-                    {this.renderSelectedCards()}
+                    {this.state.portfolioCards.length > 0?
+                        this.renderSelectedCards()
+                    :
+                        <ListGroup.Item>
+                            <p style={{"text-align": "center"}}>Use the search feature to find cards to add to this portfolio</p>
+                        </ListGroup.Item>
+                    }
                 </ListGroup>
+            
             </Col>
             </Row>
             </Container>

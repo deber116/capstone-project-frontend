@@ -181,23 +181,21 @@ class PortfolioEdit extends Component {
                                 alt="Generic placeholder"
                                 />
                                 <Media.Body className="text-center">
-                                    <p>{card.name} - {card.set_name}</p>
-                                    <div>
-                                        <InputGroup className="mb-3">
+                                    <p>{card.name} - {card.set_name} ({card.rarity})</p>
+                                    
+                                        <InputGroup className="mb-3 justify-content-center">
                                             <InputGroup.Prepend>
-                                                <Button onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
                                                 <InputGroup.Text>{this.state.quantitySelected}</InputGroup.Text>
                                             
                                             </InputGroup.Prepend>
                                             <InputGroup.Append>
-                                                <Button onClick={this.handleOnQuantityIncrease}>+</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityIncrease}>+</Button>
                                             </InputGroup.Append>
                                         </InputGroup>
-                                        </div>
-                                        <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
-                                            Add to Portfolio
+                                        <Button variant="outline-secondary" onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
+                                                Add to Portfolio
                                         </Button>
-                                    
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -215,21 +213,21 @@ class PortfolioEdit extends Component {
             <Col md={{ span: 4 }}>
             <Form>
                 {this.checkAlert()}
-                <Form.Group controlId="portfolioInputName">
+                <Form.Group >
                     <Form.Label>Portfolio Name</Form.Label>
                     <Form.Control type="username" placeholder="Portfolio name" value={this.state.portfolioName} onChange={this.handleOnPortfolioNameChange}/>
                     
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group >
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="textArea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
+                    <Form.Control as="textarea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
                 </Form.Group>
                 <Row>
                     <Col>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
-                            <Button variant="secondary" onClick={this.handleOnSearch}>Search Card</Button>
+                            <Button variant="info" onClick={this.handleOnSearch}>Search Card</Button>
                         </InputGroup.Prepend>
                         <FormControl value={this.state.searchTerm} onChange={this.handleOnSearchTermChange}/>
                     </InputGroup>
@@ -237,7 +235,7 @@ class PortfolioEdit extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <ListGroup className="search-listgroup">
+                        <ListGroup className="portfolio-create-search-listgroup" variant="flush">
                             {this.props.loader?
                                 <ListGroup.Item>"Searching..."</ListGroup.Item>
                             :
@@ -246,15 +244,25 @@ class PortfolioEdit extends Component {
                         </ListGroup>
                     </Col>
                 </Row>
-                
-                <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
+                <Row className="justify-content-center">
+                <Button className="btn-block btn-submit-portfolio" variant="info" type="submit" onClick={this.handleOnSubmit}>
                     Update Portfolio
                 </Button>
+                </Row>
             </Form>
             </Col>
             <Col>
+                <Row className="justify-content-center">
+                    <h1 style={{"font-family": "Avenir"}}>Cards in your Portfolio</h1>
+                </Row>
                 <ListGroup id="portfolio-cards-listgroup">
-                    {this.renderSelectedCards()}
+                    {this.state.portfolioCards.length > 0?
+                        this.renderSelectedCards()
+                    :
+                        <ListGroup.Item>
+                            <p style={{"text-align": "center"}}>Use the search feature to find cards to add to this portfolio</p>
+                        </ListGroup.Item>
+                    }
                 </ListGroup>
             </Col>
             </Row>
