@@ -1,14 +1,4 @@
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
 .App-header {
   background-color: #282c34;
@@ -57,22 +47,36 @@
 
 #portfolio-cards-listgroup{
   border: 3px solid #333;
-  min-height: 75vh;
+  min-height: 12vh;
+  max-height: 75vh;
   padding: 10px;
+  height: auto;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
 }
 .chartjs-render-monitor{
   margin: 10px;
 }
-
+.dashboard {
+  padding: 20px;
+}
 .portfolio-create{
   padding: 10px;
 }
 .container {
+  
   margin: 0vh;
   /* margin-left: 0vh ;
   margin-right: 0vh ; */
   padding-left: 0vh
   
+}
+
+
+
+.btn-flat {
+  background-color: purple;
+  color: white;
 }
 
 #card-info-row {
@@ -84,11 +88,4 @@ p {
   margin-bottom: 0.5rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+

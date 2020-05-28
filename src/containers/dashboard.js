@@ -55,7 +55,7 @@ class Dashboard extends Component {
     render () {
         return (
             <Container fluid >
-                <Row>
+                <Row className="dashboard">
                     <Col sm={4}>
                     
                         <Search />

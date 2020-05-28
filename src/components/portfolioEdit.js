@@ -145,9 +145,10 @@ class PortfolioEdit extends Component {
                 })
             }
 
-            fetch(`http://localhost:3001/portfolios/${this.props.selectedCard.id}`, postConfigObj)
+            fetch(`http://localhost:3001/portfolios/${this.props.selectedPortfolio.id}`, postConfigObj)
             .then(resp => resp.json())
             .then(response => {
+                console.log(response)
                 this.props.clearSearch()
                 this.props.history.push("/dashboard")
             })

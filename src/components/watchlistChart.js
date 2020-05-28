@@ -55,6 +55,7 @@ class WatchlistChart extends React.Component {
             return [
                 {
                     label: '1st Edition Price',
+                    display: true,
                     fill: true,
                     lineTension: 0,
                     backgroundColor: 'rgba(75,192,192,1)',
@@ -112,8 +113,10 @@ class WatchlistChart extends React.Component {
                         ticks: {
                             // Include a dollar sign in the ticks
                             callback: function(value, index, values) {
-                                return '$' + value;
-                            }
+                                return '$' + value.toFixed(2);
+                            },
+                            
+                            
                         }
                     }]
                 }

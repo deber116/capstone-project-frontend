@@ -247,10 +247,11 @@ class PortfolioCreate extends Component {
                         </ListGroup>
                     </Col>
                 </Row>
-                
-                <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
+                <Row className="justify-content-center">
+                <Button variant="info" type="submit" onClick={this.handleOnSubmit}>
                     Save Portfolio
                 </Button>
+                </Row>
             </Form>
             </Col>
             <Col>
