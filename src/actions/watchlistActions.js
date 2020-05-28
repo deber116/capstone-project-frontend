@@ -15,7 +15,10 @@ export const watchlistCards = authToken => {
         fetch('http://localhost:3001/watchlists', getConfigObj)
         .then(resp => resp.json())
         .then(
-            watchlistCards => dispatch({ type: "ADD_WATCHLIST_CARDS", watchlistCards})
+            watchlistCards => {
+                dispatch({ type: "ADD_WATCHLIST_CARDS", watchlistCards})
+                dispatch({type: "SELECT_CARD", card: (watchlistCards.length > 0? watchlistCards[0] : null)})
+            }
         )
         
     };
@@ -38,8 +41,10 @@ export const getPortfolios = authToken => {
         .then(resp => resp.json())
         .then(
             portfolios => {
-                console.log(portfolios)
+                
                 dispatch({ type: "GET_PORTFOLIOS", portfolios})
+                dispatch({ type: "SELECT_PORTFOLIO", portfolio: (portfolios.length > 0? portfolios[0] : null)})
+                dispatch({ type: "SELECT_PORTFOLIOCARD", pcard: (portfolios.length > 0? portfolios[0].cards[0] : null)})
             }
         )
         
@@ -118,5 +123,19 @@ export const toggleWatchlist = toggle => {
     return{
         type: "TOGGLE_WATCHLIST",
         watchlistToggle: toggle
+    }
+}
+
+export const selectPortfolio = portfolio => {
+    return{
+        type: "SELECT_PORTFOLIO",
+        portfolio
+    }
+}
+
+export const selectPortfolioCard = pcard => {
+    return{
+        type: "SELECT_PORTFOLIOCARD",
+        pcard
     }
 }

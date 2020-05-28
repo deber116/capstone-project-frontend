@@ -12,6 +12,7 @@ import Card from 'react-bootstrap/Card'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Alert from 'react-bootstrap/Alert'
+import { toggleWatchlist } from '../actions/watchlistActions';
 
 
 class PortfolioCreate extends Component {
@@ -98,7 +99,7 @@ class PortfolioCreate extends Component {
                     <p>
                         {card.name}-{card.set_name}          x{card.quantity} 
                         
-                        <Button variant="danger" onClick={() => this.handleOnRemove(card)}>
+                        <Button variant="danger" style={{float: "right"}} onClick={() => this.handleOnRemove(card)}>
                             Remove
                         </Button>
                     </p>
@@ -120,6 +121,7 @@ class PortfolioCreate extends Component {
 
     handleOnSubmit = event => {
         event.preventDefault()
+        this.props.toggleWatchlist("cards")
         if (this.state.portfolioName == "") {
             this.setState({
                 invalid: true
@@ -167,6 +169,7 @@ class PortfolioCreate extends Component {
         return this.props.searchedCards.map(card => {
             
             return(
+                
                 <ListGroup.Item>
                     <Card>
                         <Card.Body>
@@ -200,26 +203,28 @@ class PortfolioCreate extends Component {
                         </Card.Body>
                     </Card>
                 </ListGroup.Item>
+                
             )
         })
     }
 
     render () {
         return (
-            <Container>
+            <div className="portfolio-create">
+            <Container fluid>
             <Row>
-            <Col>
+            <Col md={{ span: 4 }}>
             <Form>
                 {this.checkAlert()}
-                <Form.Group controlId="portfolioInputName">
+                <Form.Group >
                     <Form.Label>Portfolio Name</Form.Label>
                     <Form.Control type="username" placeholder="Portfolio name" value={this.state.portfolioName} onChange={this.handleOnPortfolioNameChange}/>
                     
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group >
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="textArea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
+                    <Form.Control as="textarea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
                 </Form.Group>
                 <Row>
                     <Col>
@@ -233,7 +238,7 @@ class PortfolioCreate extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <ListGroup className="search-listgroup" variant="flush">
+                        <ListGroup className="portfolio-create-search-listgroup" variant="flush">
                             {this.props.loader?
                                 <ListGroup.Item>"Searching..."</ListGroup.Item>
                             :
@@ -249,12 +254,14 @@ class PortfolioCreate extends Component {
             </Form>
             </Col>
             <Col>
+                <h1>Cards in your Portfolio</h1>
                 <ListGroup id="portfolio-cards-listgroup">
                     {this.renderSelectedCards()}
                 </ListGroup>
             </Col>
             </Row>
             </Container>
+            </div>
         )
     }
 }
@@ -274,6 +281,9 @@ const mapDispatchToProps = dispatch => {
         },
         clearSearch: () => {
             dispatch(clearSearch())
+        },
+        toggleWatchlist: toggle => {
+            dispatch(toggleWatchlist(toggle))
         }
     }
 }

@@ -89,12 +89,12 @@ class SignupPage extends Component {
             this.props.history.push("/dashboard")
         }
         return(
-        <Container>
+        <Container fluid>
             <Row>
             <Col md={{ span: 4, offset: 4 }}>
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit}>
-                <h1>New to the site? Make an account below</h1>
+                <h5>New to the site? Make an account below</h5>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="username" placeholder="Enter username" value={this.state.username} onChange={this.handleOnUsernameChange}/>

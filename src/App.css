@@ -30,6 +30,15 @@
   padding-left: 0vh
 }
 
+#watchlist-listgroup-small{
+  height: auto;
+  max-height: calc(65vh - 56px);
+  margin-bottom: 10px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 0vh
+}
+
 .search-listgroup{
   height: auto;
   max-height: calc(88vh - 56px);
@@ -38,17 +47,30 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.portfolio-create-search-listgroup{
+  height: auto;
+  max-height: calc(50vh - 56px);
+  margin-bottom: 10px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 #portfolio-cards-listgroup{
   border: 3px solid #333;
   min-height: 75vh;
+  padding: 10px;
 }
 .chartjs-render-monitor{
   margin: 10px;
-  
+}
+
+.portfolio-create{
+  padding: 10px;
 }
 .container {
-  margin-left: 0vh ;
-  margin-right: 0vh ;
+  margin: 0vh;
+  /* margin-left: 0vh ;
+  margin-right: 0vh ; */
   padding-left: 0vh
   
 }

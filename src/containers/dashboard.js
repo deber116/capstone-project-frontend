@@ -11,7 +11,7 @@ import { Route } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
-import { toggleWatchlist } from '../actions/watchlistActions';
+import { toggleWatchlist, selectCard, selectPortfolio } from '../actions/watchlistActions';
 
 class Dashboard extends Component {
     state = {
@@ -20,21 +20,36 @@ class Dashboard extends Component {
     //contains chart
     //contains search bar and results 
     //contains grid with cards for products and portfolios being followed
+    
 
     handleWatchlistToggleCards = () => {
         if (this.props.watchlistToggle === "cards") {
-            return "secondary"
+            return "info"
         } else {
-            return "outline-secondary"
+            return "outline-info"
         }
     }
 
     handleWatchlistTogglePortfolios = () => {
         if (this.props.watchlistToggle === "portfolios") {
-            return "secondary"
+            return "info"
         } else {
-            return "outline-secondary"
+            return "outline-info"
         }
+    }
+
+    clickCardsButton = () => {
+        if (this.props.cards.length > 0) {
+            this.props.selectCard(this.props.cards[0])
+        }
+        this.props.toggleWatchlist("cards")
+    }
+
+    clickPortfoliosButton = () => {
+        if (this.props.portfolios.length > 0) {
+            this.props.selectPortfolio(this.props.portfolios[0])
+        }
+        this.props.toggleWatchlist("portfolios")
     }
     
     render () {
@@ -47,17 +62,17 @@ class Dashboard extends Component {
                         {this.props.searching?
                             null
                         :
-                        <>
-                            <InputGroup className="mb-3">                
+                        <Row className="justify-content-center">
+                            <InputGroup className="mb-3 justify-content-center">                
                                 <InputGroup.Prepend>
-                                    <Button  variant={this.handleWatchlistToggleCards()} onClick={() => this.props.toggleWatchlist("cards")}>Individual Cards</Button>
+                                    <Button  variant={this.handleWatchlistToggleCards()} onClick={this.clickCardsButton}>Individual Cards</Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Append>
-                                    <Button variant={this.handleWatchlistTogglePortfolios()} onClick={() => this.props.toggleWatchlist("portfolios")}>Portfolios</Button>
+                                    <Button variant={this.handleWatchlistTogglePortfolios()} onClick={this.clickPortfoliosButton}>Portfolios</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                             < Watchlist history={this.props.history}/>
-                        </>
+                        </Row>
                         }
                     </Col>
                     <Col sm={8}>
@@ -69,11 +84,9 @@ class Dashboard extends Component {
                                         <WatchlistChart />
                                     </Col>
                                 </Row>
-                                {this.props.selectedCard?
+                                
                                     <ShowCard history={this.props.history} />
-                                :
-                                    null
-                                }
+                                
                             </Container>
                         
                     </Col>
@@ -89,7 +102,9 @@ const mapStateToProps = state => {
         moreInfo: state.watchlist.moreInfo,
         selectedCard: state.watchlist.selectedCard,
         searching: state.search.searching,
-        watchlistToggle: state.watchlist.watchlistToggle
+        watchlistToggle: state.watchlist.watchlistToggle,
+        cards: state.watchlist.watchlistCards,
+        portfolios: state.watchlist.portfolios
     }
 }
 
@@ -97,6 +112,12 @@ const mapDispatchToProps = dispatch => {
     return {
         toggleWatchlist: toggle => {
             dispatch(toggleWatchlist(toggle))
+        },
+        selectCard: card => {
+            dispatch(selectCard(card))
+        },
+        selectPortfolio: portfolio => {
+            dispatch(selectPortfolio(portfolio))
         }
     }
 }

@@ -32,8 +32,15 @@ class WatchlistChart extends React.Component {
     }
 
     createData = () => {
-        if (this.props.selectedCard) {
-            let results = this.props.selectedCard.recent_prices.map(price => {
+        let selectedItem = null
+        if (this.props.watchlistToggle == "portfolios") {
+            selectedItem = this.props.selectedPortfolio
+        } else if (this.props.watchlistToggle == "cards") {
+            selectedItem = this.props.selectedCard
+        } 
+
+        if (selectedItem) {
+            let results = selectedItem.recent_prices.map(price => {
                 if (price.edition == "1st Edition" || price.edition == "Limited") {
                     return price.amount
                 } 
@@ -118,7 +125,9 @@ class WatchlistChart extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        selectedCard: state.watchlist.selectedCard
+        selectedCard: state.watchlist.selectedCard,
+        watchlistToggle: state.watchlist.watchlistToggle,
+        selectedPortfolio: state.watchlist.selectedPortfolio
     }
 }
 export default connect(mapStateToProps)(WatchlistChart)

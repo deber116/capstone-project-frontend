@@ -10,7 +10,9 @@ import {
     subtractWatchlistCard, 
     moreInfo,
     getPortfolios,
-    deletePortfolio
+    deletePortfolio,
+    selectPortfolio,
+    selectPortfolioCard
  } from '../actions/watchlistActions';
  import { clearSearch } from '../actions/searchActions';
  import Accordion from 'react-bootstrap/Accordion'
@@ -54,7 +56,7 @@ class Watchlist extends Component {
             return(
                 <ListGroup.Item>
                     <Accordion>
-                    <Card bg={this.checkIfClicked(portfolio)} onClick={() => this.props.selectCard(portfolio)}>
+                    <Card bg={this.checkIfPortfolioClicked(portfolio)} onClick={() => this.handleOnPortfolioCardClick(portfolio)}>
                     
                         <Card.Body>
                             <Media>
@@ -114,6 +116,14 @@ class Watchlist extends Component {
 
     }
 
+    handleOnPortfolioCardClick = portfolio => {
+        
+        this.props.selectPortfolio(portfolio)
+        
+        this.props.selectPortfolioCard(portfolio.cards[0])
+        
+    }
+
     handleOnPortfolioUpdate = portfolio => {
         this.props.history.push(`/portfolios/edit/${portfolio.id}`)
     }
@@ -122,20 +132,21 @@ class Watchlist extends Component {
         this.props.deletePortfolio(portfolio, this.props.token)
     }
 
-    handleOnMoreInfoClick = () => {
-        this.props.moreInfo()
-        this.props.history.push(`/dashboard/1`)
-    }
 
     handleOnXCLick = card => {
         this.props.subtractWatchlistCard(card, this.props.token)
-        // console.log(this.props.cards.indexOf(card) )
-    //     const newIdx = (this.props.cards.indexOf(card) - 2)
-    //     this.props.selectCard(this.props.cards[newIdx])
     }
 
     checkIfClicked = card => {
         if (card == this.props.selectedCard){
+            return "light"
+        } else {
+            return ""
+        }
+    }
+
+    checkIfPortfolioClicked = portfolio => {
+        if (portfolio == this.props.selectedPortfolio){
             return "light"
         } else {
             return ""
@@ -189,7 +200,8 @@ const mapStateToProps = state => {
         loader: state.watchlist.loader,
         selectedCard: state.watchlist.selectedCard,
         portfolios: state.watchlist.portfolios,
-        watchlistToggle: state.watchlist.watchlistToggle
+        watchlistToggle: state.watchlist.watchlistToggle,
+        selectedPortfolio: state.watchlist.selectedPortfolio
     }
 }
 
@@ -215,6 +227,12 @@ const mapDispatchToProps = dispatch => {
         },
         clearSearch: () => {
             dispatch(clearSearch())
+        },
+        selectPortfolio: portfolio => {
+            dispatch(selectPortfolio(portfolio))
+        },
+        selectPortfolioCard: pcard => {
+            dispatch(selectPortfolioCard(pcard))
         }
     }
 }

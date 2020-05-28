@@ -16,10 +16,10 @@ import Alert from 'react-bootstrap/Alert'
 
 class PortfolioEdit extends Component {
     state = {
-        portfolioName: this.props.selectedCard.name,
-        description: this.props.selectedCard.description,
+        portfolioName: this.props.selectedPortfolio.name,
+        description: this.props.selectedPortfolio.description,
         searchTerm: "",
-        portfolioCards: this.props.selectedCard.cards,
+        portfolioCards: this.props.selectedPortfolio.cards,
         quantitySelected: 1,
         invalid: false
     }
@@ -99,7 +99,7 @@ class PortfolioEdit extends Component {
                     <p>
                         {card.name}-{card.set_name}          x{card.quantity} 
                         
-                        <Button variant="danger" onClick={() => this.handleOnRemove(card)}>
+                        <Button variant="danger" style={{float: "right"}} onClick={() => this.handleOnRemove(card)}>
                             Remove
                         </Button>
                     </p>
@@ -208,9 +208,10 @@ class PortfolioEdit extends Component {
 
     render () {
         return (
-            <Container>
+            <div className="portfolio-create">
+            <Container fluid>
             <Row>
-            <Col>
+            <Col md={{ span: 4 }}>
             <Form>
                 {this.checkAlert()}
                 <Form.Group controlId="portfolioInputName">
@@ -246,7 +247,7 @@ class PortfolioEdit extends Component {
                 </Row>
                 
                 <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
-                    Submit
+                    Update Portfolio
                 </Button>
             </Form>
             </Col>
@@ -257,6 +258,7 @@ class PortfolioEdit extends Component {
             </Col>
             </Row>
             </Container>
+            </div>
         )
     }
 }
@@ -266,7 +268,8 @@ const mapStateToProps = state => {
         token: state.user.token,
         searchedCards: state.search.searchedCards,
         loader: state.search.loader,
-        selectedCard: state.watchlist.selectedCard
+        selectedCard: state.watchlist.selectedCard,
+        selectedPortfolio: state.watchlist.selectedPortfolio
     } 
 }
 

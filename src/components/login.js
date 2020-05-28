@@ -94,7 +94,7 @@ class LoginPage extends Component {
         return(
         <Container fluid>
             <Row >
-            <Col md={{ span: 4, offset: 4 }} >
+            <Col md={{ span: 4, offset: 4 }} className="align-items-center my-auto">
                 <Row className="justify-content-center align-items-center">
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit} >
