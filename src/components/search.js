@@ -9,11 +9,12 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Card from 'react-bootstrap/Card'
 import Media from 'react-bootstrap/Media'
 import { connect } from 'react-redux';
-import { searchCards, addCardToWatchlist } from '../actions/searchActions';
+import { searchCards, addCardToWatchlist, clearSearch } from '../actions/searchActions';
 
 class Search extends Component {
     state = {
-        searchTerm: ''
+        searchTerm: '',
+        showXButton: false
     }
 
     handleOnSearchTermChange = event => {
@@ -24,13 +25,44 @@ class Search extends Component {
 
     handleOnSearch = () => {
         this.props.searchCards(this.state.searchTerm, this.props.token)
-        
+        this.setState({
+            showXButton: true
+        })
+    }
+
+    handleOnXClick = () => {
+        this.setState({
+            showXButton: false,
+            searchTerm: ''
+        })
+        this.props.clearSearch()
     }
 
     handleOnAdd = card => {
         this.props.addCardToWatchlist(card, this.props.token)
+        this.setState({
+            searchTerm: '',
+            showXButton: false
+        })
+    }
+    
+    isSearchedCardAlreadyInList = card => {
+        let addedToList = false 
+        this.props.cards.map(pcard => {
+            if (pcard.product_id === card.product_id) {
+                addedToList = true
+            }
+        })
+        return addedToList
     }
 
+    updateAddButtonTest = card => {
+        if (this.isSearchedCardAlreadyInList(card)) {
+            return "Already added to watchlist"
+        } else {
+            return "+"
+        }
+    }
     createCards = () => {
         return this.props.searchedCards.map(card => {
             return(
@@ -47,10 +79,10 @@ class Search extends Component {
                                 />
                                 <Media.Body className="text-center">
                                     <p>
-                                        {card.name} - {card.set_name}
+                                        {card.name} - {card.set_name} ({card.rarity})
                                     </p>
-                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnAdd(card)}>
-                                        +
+                                    <Button variant="outline-secondary" size="xs" onClick={() => this.handleOnAdd(card)} disabled={this.isSearchedCardAlreadyInList(card)}>
+                                        {this.updateAddButtonTest(card)}
                                     </Button>
                                 </Media.Body>
                             </Media>
@@ -72,6 +104,13 @@ class Search extends Component {
                                 <Button variant="secondary" onClick={this.handleOnSearch}>Search Card</Button>
                             </InputGroup.Prepend>
                             <FormControl value={this.state.searchTerm} onChange={this.handleOnSearchTermChange}/>
+                            {this.state.showXButton?
+                                <InputGroup.Append>
+                                    <Button variant="danger" onClick={this.handleOnXClick}>X</Button>
+                                </InputGroup.Append>
+                            :
+                                null
+                            }
                         </InputGroup>
                         </Col>
                     </Row>
@@ -96,7 +135,8 @@ const mapStateToProps = state => {
     return {
         token: state.user.token,
         searchedCards: state.search.searchedCards,
-        loader: state.search.loader
+        loader: state.search.loader,
+        cards: state.watchlist.watchlistCards,
     } 
 }
 
@@ -107,6 +147,9 @@ const mapDispatchToProps = dispatch => {
         }, 
         addCardToWatchlist: (card, authToken) => {
             dispatch(addCardToWatchlist(card, authToken))
+        },
+        clearSearch: () => {
+            dispatch(clearSearch())
         }
     }
 }

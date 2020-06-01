@@ -1,14 +1,4 @@
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
 .App-header {
   background-color: #282c34;
@@ -23,38 +13,119 @@
 
 #watchlist-listgroup{
   height: auto;
-  max-height: calc(55vh - 56px);
+  max-height: calc(80vh - 56px);
   margin-bottom: 10px;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
+  padding-left: 0vh
+}
+
+#watchlist-listgroup-small{
+  height: auto;
+  max-height: calc(65vh - 56px);
+  margin-bottom: 10px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 0vh
 }
 
 .search-listgroup{
   height: auto;
-  max-height: calc(48vh - 56px);
+  max-height: calc(88vh - 56px);
   margin-bottom: 10px;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
 }
 
+.portfolio-create-search-listgroup{
+  height: auto;
+  max-height: calc(50vh - 56px);
+  margin-bottom: 10px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+}
+.btn-submit-portfolio {
+  margin: 15px;
+}
+.btn-portfolio-card {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
 #portfolio-cards-listgroup{
-  border: 3px solid #333;
-  min-height: 75vh;
+  
+  min-height: 12vh;
+  max-height: 75vh;
+  padding: 10px;
+  height: auto;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
 }
 .chartjs-render-monitor{
   margin: 10px;
+}
+.dashboard {
+  padding: 20px;
+}
+.portfolio-create{
+  padding: 10px;
+}
+.container {
+  
+  margin: 0vh;
+  /* margin-left: 0vh ;
+  margin-right: 0vh ; */
+  padding-left: 0vh
   
 }
 
-.App-link {
-  color: #61dafb;
+.custom-shadow {
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
+  box-shadow: 5px 5px 5px 0px rgba(217,214,217,1);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-portfolio {
+  margin-right: 5px;
+  margin-left: 5px;
 }
+
+.btn-teal {
+  background-color: rgba(75,192,192,1);
+  color: white;
+}
+
+.btn-outline-teal {
+  background-color: white;
+  color: rgba(75,192,192,1);
+  border-color: rgba(75,192,192,1);
+}
+
+.bg-teal {
+  background-color: rgba(75,192,192,1);
+  color: white;
+}
+.bg-outline-teal {
+  background-color: white;
+  color: rgba(75,192,192,1);
+}
+
+.bg-grey {
+  background-color: #f2f2f2;
+  color: rgb(63, 63, 63);
+}
+.btn-flat {
+  background-color: purple;
+  color: white;
+}
+
+#card-info-row {
+  height: 120px;
+}
+
+p {
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+

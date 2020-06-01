@@ -16,10 +16,10 @@ import Alert from 'react-bootstrap/Alert'
 
 class PortfolioEdit extends Component {
     state = {
-        portfolioName: this.props.selectedCard.name,
-        description: this.props.selectedCard.description,
+        portfolioName: this.props.selectedPortfolio.name,
+        description: this.props.selectedPortfolio.description,
         searchTerm: "",
-        portfolioCards: this.props.selectedCard.cards,
+        portfolioCards: this.props.selectedPortfolio.cards,
         quantitySelected: 1,
         invalid: false
     }
@@ -99,7 +99,7 @@ class PortfolioEdit extends Component {
                     <p>
                         {card.name}-{card.set_name}          x{card.quantity} 
                         
-                        <Button variant="danger" onClick={() => this.handleOnRemove(card)}>
+                        <Button variant="danger" style={{float: "right"}} onClick={() => this.handleOnRemove(card)}>
                             Remove
                         </Button>
                     </p>
@@ -145,9 +145,10 @@ class PortfolioEdit extends Component {
                 })
             }
 
-            fetch(`http://localhost:3001/portfolios/${this.props.selectedCard.id}`, postConfigObj)
+            fetch(`http://localhost:3001/portfolios/${this.props.selectedPortfolio.id}`, postConfigObj)
             .then(resp => resp.json())
             .then(response => {
+                console.log(response)
                 this.props.clearSearch()
                 this.props.history.push("/dashboard")
             })
@@ -169,7 +170,7 @@ class PortfolioEdit extends Component {
             
             return(
                 <ListGroup.Item>
-                    <Card>
+                    <Card className="custom-shadow">
                         <Card.Body>
                             <Media>
                                 <img
@@ -180,23 +181,21 @@ class PortfolioEdit extends Component {
                                 alt="Generic placeholder"
                                 />
                                 <Media.Body className="text-center">
-                                    <p>{card.name} - {card.set_name}</p>
-                                    <div>
-                                        <InputGroup className="mb-3">
+                                    <p>{card.name} - {card.set_name} ({card.rarity})</p>
+                                    
+                                        <InputGroup className="mb-3 justify-content-center">
                                             <InputGroup.Prepend>
-                                                <Button onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
                                                 <InputGroup.Text>{this.state.quantitySelected}</InputGroup.Text>
                                             
                                             </InputGroup.Prepend>
                                             <InputGroup.Append>
-                                                <Button onClick={this.handleOnQuantityIncrease}>+</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityIncrease}>+</Button>
                                             </InputGroup.Append>
                                         </InputGroup>
-                                        </div>
-                                        <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
-                                            Add to Portfolio
+                                        <Button variant="outline-secondary" onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
+                                                Add to Portfolio
                                         </Button>
-                                    
                                 </Media.Body>
                             </Media>
                         </Card.Body>
@@ -208,20 +207,21 @@ class PortfolioEdit extends Component {
 
     render () {
         return (
-            <Container>
+            <div className="portfolio-create">
+            <Container fluid>
             <Row>
-            <Col>
+            <Col md={{ span: 4 }}>
             <Form>
                 {this.checkAlert()}
-                <Form.Group controlId="portfolioInputName">
+                <Form.Group >
                     <Form.Label>Portfolio Name</Form.Label>
                     <Form.Control type="username" placeholder="Portfolio name" value={this.state.portfolioName} onChange={this.handleOnPortfolioNameChange}/>
                     
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group >
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="textArea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
+                    <Form.Control as="textarea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
                 </Form.Group>
                 <Row>
                     <Col>
@@ -235,7 +235,7 @@ class PortfolioEdit extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <ListGroup className="search-listgroup">
+                        <ListGroup className="portfolio-create-search-listgroup" variant="flush">
                             {this.props.loader?
                                 <ListGroup.Item>"Searching..."</ListGroup.Item>
                             :
@@ -244,19 +244,30 @@ class PortfolioEdit extends Component {
                         </ListGroup>
                     </Col>
                 </Row>
-                
-                <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
-                    Submit
+                <Row className="justify-content-center">
+                <Button className="btn-block btn-submit-portfolio" variant="teal" type="submit" onClick={this.handleOnSubmit}>
+                    Update Portfolio
                 </Button>
+                </Row>
             </Form>
             </Col>
             <Col>
+                <Row className="justify-content-center">
+                    <h1 style={{"font-family": "Avenir"}}>Cards in your Portfolio</h1>
+                </Row>
                 <ListGroup id="portfolio-cards-listgroup">
-                    {this.renderSelectedCards()}
+                    {this.state.portfolioCards.length > 0?
+                        this.renderSelectedCards()
+                    :
+                        <ListGroup.Item>
+                            <p style={{"text-align": "center"}}>Use the search feature to find cards to add to this portfolio</p>
+                        </ListGroup.Item>
+                    }
                 </ListGroup>
             </Col>
             </Row>
             </Container>
+            </div>
         )
     }
 }
@@ -266,7 +277,8 @@ const mapStateToProps = state => {
         token: state.user.token,
         searchedCards: state.search.searchedCards,
         loader: state.search.loader,
-        selectedCard: state.watchlist.selectedCard
+        selectedCard: state.watchlist.selectedCard,
+        selectedPortfolio: state.watchlist.selectedPortfolio
     } 
 }
 

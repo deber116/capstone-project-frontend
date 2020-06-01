@@ -8,6 +8,10 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
+import Tab from 'react-bootstrap/Tab'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Button from 'react-bootstrap/Button'
+import { toggleWatchlist, selectCard, selectPortfolio } from '../actions/watchlistActions';
 
 class Dashboard extends Component {
     state = {
@@ -17,35 +21,77 @@ class Dashboard extends Component {
     //contains search bar and results 
     //contains grid with cards for products and portfolios being followed
     
+
+    handleWatchlistToggleCards = () => {
+        if (this.props.watchlistToggle === "cards") {
+            return "teal"
+        } else {
+            return "outline-teal"
+        }
+    }
+
+    handleWatchlistTogglePortfolios = () => {
+        if (this.props.watchlistToggle === "portfolios") {
+            return "teal"
+        } else {
+            return "outline-teal"
+        }
+    }
+
+    clickCardsButton = () => {
+        if (this.props.cards.length > 0) {
+            this.props.selectCard(this.props.cards[0])
+        }
+        this.props.toggleWatchlist("cards")
+    }
+
+    clickPortfoliosButton = () => {
+        if (this.props.portfolios.length > 0) {
+            this.props.selectPortfolio(this.props.portfolios[0])
+        }
+        this.props.toggleWatchlist("portfolios")
+    }
+    
     render () {
         return (
-            <Container >
-                <Row>
-                    <Col xs={12}>
-                        <WatchlistChart />
-                    </Col>
-                </Row >
-                {this.props.moreInfo?
-                    <Route path={'/dashboard/:productId'} render={routerProps =>  <ShowCard {...routerProps} /> }/>
-                :
-                    <>
-                    <Row>
-                        <Col md={6}>
-                            <h5>Watchlist</h5>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
+            <Container fluid >
+                <Row className="dashboard">
+                    <Col sm={4}>
+                    
+                        <Search />
+                        {this.props.searching?
+                            null
+                        :
+                        <Row className="justify-content-center">
+                            <InputGroup className="mb-3 justify-content-center">                
+                                <InputGroup.Prepend>
+                                    <Button  variant={this.handleWatchlistToggleCards()} onClick={this.clickCardsButton}>Individual Cards</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Append>
+                                    <Button variant={this.handleWatchlistTogglePortfolios()} onClick={this.clickPortfoliosButton}>Portfolios</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
                             < Watchlist history={this.props.history}/>
-                        </Col>
-                        <Col>
-                            < Search />
-                        </Col>
-                    </Row>
-                    </>
-                }
+                        </Row>
+                        }
+                    </Col>
+                    <Col sm={8}>
+                        
+                        
+                            <Container >
+                                <Row>
+                                    <Col sm={12}>
+                                        <WatchlistChart />
+                                    </Col>
+                                </Row>
+                                
+                                    <ShowCard history={this.props.history} />
+                                
+                            </Container>
+                        
+                    </Col>
+                </Row>
             </Container>
-            
         )
     }
 
@@ -53,8 +99,27 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
     return {
-        moreInfo: state.watchlist.moreInfo
+        moreInfo: state.watchlist.moreInfo,
+        selectedCard: state.watchlist.selectedCard,
+        searching: state.search.searching,
+        watchlistToggle: state.watchlist.watchlistToggle,
+        cards: state.watchlist.watchlistCards,
+        portfolios: state.watchlist.portfolios
     }
 }
 
-export default connect(mapStateToProps)(Dashboard)
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleWatchlist: toggle => {
+            dispatch(toggleWatchlist(toggle))
+        },
+        selectCard: card => {
+            dispatch(selectCard(card))
+        },
+        selectPortfolio: portfolio => {
+            dispatch(selectPortfolio(portfolio))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

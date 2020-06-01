@@ -48,10 +48,10 @@ class App extends Component {
             <Route exact path="/signup" render={routerProps => <SignupPage {...routerProps}/>} />
            
             {this.props.token?
-            <>
+            <div className="main-background">
               <Route path="/dashboard" render={routerProps => <Dashboard {...routerProps}/>} />
               <Route path="/portfolios" render={routerProps => <Portfolios {...routerProps}/>} />
-            </>
+            </div>
             :
             <Redirect to="/login" />
             }

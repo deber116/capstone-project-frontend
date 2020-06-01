@@ -7,7 +7,7 @@ class WatchlistChart extends React.Component {
     createLabels = () => {
         if (this.props.selectedCard) {
             let results = this.props.selectedCard.recent_prices.map(price => {
-                if (price.edition == "1st Edition") {
+                if (price.edition == "1st Edition" || price.edition == "Limited") {
                     return true
                 } 
                 return null
@@ -32,9 +32,16 @@ class WatchlistChart extends React.Component {
     }
 
     createData = () => {
-        if (this.props.selectedCard) {
-            let results = this.props.selectedCard.recent_prices.map(price => {
-                if (price.edition == "1st Edition") {
+        let selectedItem = null
+        if (this.props.watchlistToggle == "portfolios") {
+            selectedItem = this.props.selectedPortfolio
+        } else if (this.props.watchlistToggle == "cards") {
+            selectedItem = this.props.selectedCard
+        } 
+
+        if (selectedItem) {
+            let results = selectedItem.recent_prices.map(price => {
+                if (price.edition == "1st Edition" || price.edition == "Limited") {
                     return price.amount
                 } 
                 return null
@@ -43,10 +50,12 @@ class WatchlistChart extends React.Component {
             results = results.filter(amount => {
                 return amount
             })
+            
 
             return [
                 {
                     label: '1st Edition Price',
+                    display: true,
                     fill: true,
                     lineTension: 0,
                     backgroundColor: 'rgba(75,192,192,1)',
@@ -74,6 +83,12 @@ class WatchlistChart extends React.Component {
     }
 
     render() {
+        let selectedItemName = null
+        if (this.props.watchlistToggle == "portfolios" && this.props.selectedPortfolio) {
+            selectedItemName = ("Portfolio: " + this.props.selectedPortfolio.name + " - ")
+        } else if (this.props.watchlistToggle == "cards" && this.props.selectedCard) {
+            selectedItemName = (this.props.selectedCard.name + " - ")
+        } 
         return (
         <div>
             <Line
@@ -86,7 +101,7 @@ class WatchlistChart extends React.Component {
             options={{
                 title:{
                 display:true,
-                text: `1st Edition Prices`,
+                text: `${selectedItemName}1st Edition Prices`,
                 fontSize:20
                 },
                 legend:{
@@ -104,8 +119,10 @@ class WatchlistChart extends React.Component {
                         ticks: {
                             // Include a dollar sign in the ticks
                             callback: function(value, index, values) {
-                                return '$' + value;
-                            }
+                                return '$' + value.toFixed(2);
+                            },
+                            
+                            
                         }
                     }]
                 }
@@ -117,7 +134,9 @@ class WatchlistChart extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        selectedCard: state.watchlist.selectedCard
+        selectedCard: state.watchlist.selectedCard,
+        watchlistToggle: state.watchlist.watchlistToggle,
+        selectedPortfolio: state.watchlist.selectedPortfolio
     }
 }
 export default connect(mapStateToProps)(WatchlistChart)

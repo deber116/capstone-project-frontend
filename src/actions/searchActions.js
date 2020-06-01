@@ -44,7 +44,10 @@ export const addCardToWatchlist = (card, authToken) => {
         fetch('http://localhost:3001/watchlists', postConfigObj)
         .then(resp => resp.json())
         .then(
-            response => dispatch({ type: "ADD_SEARCHED_CARD_TO_WATCHLIST", newCard: response})
+            response => {
+                dispatch({ type: "ADD_SEARCHED_CARD_TO_WATCHLIST", newCard: response})
+                dispatch({type: "CLEAR_SEARCH"})
+            }
         )
         
     };

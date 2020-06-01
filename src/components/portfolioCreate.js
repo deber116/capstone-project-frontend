@@ -12,6 +12,7 @@ import Card from 'react-bootstrap/Card'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Alert from 'react-bootstrap/Alert'
+import { toggleWatchlist } from '../actions/watchlistActions';
 
 
 class PortfolioCreate extends Component {
@@ -98,7 +99,7 @@ class PortfolioCreate extends Component {
                     <p>
                         {card.name}-{card.set_name}          x{card.quantity} 
                         
-                        <Button variant="danger" onClick={() => this.handleOnRemove(card)}>
+                        <Button variant="danger" style={{float: "right"}} onClick={() => this.handleOnRemove(card)}>
                             Remove
                         </Button>
                     </p>
@@ -120,6 +121,7 @@ class PortfolioCreate extends Component {
 
     handleOnSubmit = event => {
         event.preventDefault()
+        this.props.toggleWatchlist("cards")
         if (this.state.portfolioName == "") {
             this.setState({
                 invalid: true
@@ -168,7 +170,7 @@ class PortfolioCreate extends Component {
             
             return(
                 <ListGroup.Item>
-                    <Card>
+                    <Card className="custom-shadow">
                         <Card.Body>
                             <Media>
                                 <img
@@ -179,47 +181,49 @@ class PortfolioCreate extends Component {
                                 alt="Generic placeholder"
                                 />
                                 <Media.Body className="text-center">
-                                    <p>{card.name} - {card.set_name}</p>
+                                    <p>{card.name} - {card.set_name} ({card.rarity})</p>
                                         
-                                        <InputGroup className="mb-3">
-                                        
+                                        <InputGroup className="mb-3 justify-content-center">
                                             <InputGroup.Prepend>
-                                                <Button onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityDecrease} disabled={this.quantityLessThanZero()}>-</Button>
                                                 <InputGroup.Text>{this.state.quantitySelected}</InputGroup.Text>
                                             
                                             </InputGroup.Prepend>
                                             <InputGroup.Append>
-                                                <Button onClick={this.handleOnQuantityIncrease}>+</Button>
+                                                <Button variant="secondary" onClick={this.handleOnQuantityIncrease}>+</Button>
                                             </InputGroup.Append>
-                                            <Button onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)}>
-                                                Add to Portfolio
-                                            </Button>
+                                            
                                         </InputGroup>
+                                        <Button variant="outline-secondary" onClick={() => {this.handleOnAdd(card, this.state.quantitySelected)}} disabled={this.isSearchedCardAlreadyInList(card)} className="btn-portfolio">
+                                                Add to Portfolio
+                                        </Button>
                                 </Media.Body>
                             </Media>
                         </Card.Body>
                     </Card>
                 </ListGroup.Item>
+                
             )
         })
     }
 
     render () {
         return (
-            <Container>
+            <div className="portfolio-create">
+            <Container fluid>
             <Row>
-            <Col>
+            <Col md={{ span: 4 }}>
             <Form>
                 {this.checkAlert()}
-                <Form.Group controlId="portfolioInputName">
+                <Form.Group >
                     <Form.Label>Portfolio Name</Form.Label>
                     <Form.Control type="username" placeholder="Portfolio name" value={this.state.portfolioName} onChange={this.handleOnPortfolioNameChange}/>
                     
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group >
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="textArea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
+                    <Form.Control as="textarea" placeholder="Portfolio description" value={this.state.description} onChange={this.handleOnDescriptionChange}/>
                 </Form.Group>
                 <Row>
                     <Col>
@@ -233,7 +237,7 @@ class PortfolioCreate extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <ListGroup className="search-listgroup" variant="flush">
+                        <ListGroup className="portfolio-create-search-listgroup" variant="flush">
                             {this.props.loader?
                                 <ListGroup.Item>"Searching..."</ListGroup.Item>
                             :
@@ -242,19 +246,31 @@ class PortfolioCreate extends Component {
                         </ListGroup>
                     </Col>
                 </Row>
-                
-                <Button variant="primary" type="submit" onClick={this.handleOnSubmit}>
+                <Row className="justify-content-center">
+                <Button className="btn-block btn-submit-portfolio" variant="teal" type="submit" onClick={this.handleOnSubmit}>
                     Save Portfolio
                 </Button>
+                </Row>
             </Form>
             </Col>
             <Col>
+                <Row className="justify-content-center">
+                    <h1 style={{"font-family": "Avenir"}}>Cards in your Portfolio</h1>
+                </Row>
                 <ListGroup id="portfolio-cards-listgroup">
-                    {this.renderSelectedCards()}
+                    {this.state.portfolioCards.length > 0?
+                        this.renderSelectedCards()
+                    :
+                        <ListGroup.Item>
+                            <p style={{"text-align": "center"}}>Use the search feature to find cards to add to this portfolio</p>
+                        </ListGroup.Item>
+                    }
                 </ListGroup>
+            
             </Col>
             </Row>
             </Container>
+            </div>
         )
     }
 }
@@ -274,6 +290,9 @@ const mapDispatchToProps = dispatch => {
         },
         clearSearch: () => {
             dispatch(clearSearch())
+        },
+        toggleWatchlist: toggle => {
+            dispatch(toggleWatchlist(toggle))
         }
     }
 }

@@ -94,7 +94,7 @@ class LoginPage extends Component {
         return(
         <Container fluid>
             <Row >
-            <Col md={{ span: 4, offset: 4 }} >
+            <Col md={{ span: 4, offset: 4 }} className="align-items-center my-auto">
                 <Row className="justify-content-center align-items-center">
             {this.checkAlert()}
             <Form onSubmit={this.handleOnSubmit} >
@@ -109,7 +109,7 @@ class LoginPage extends Component {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={this.state.password} onChange={this.handleOnPasswordChange}/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button className="btn-block" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>
